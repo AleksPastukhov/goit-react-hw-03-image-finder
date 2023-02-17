@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const Searchbar = styled.div`
+export const SearchBar = styled.header`
   top: 0;
   left: 0;
   position: sticky;
@@ -28,7 +28,7 @@ export const SearchForm = styled.div`
   border-radius: 3px;
   overflow: hidden;
 
-  &-button {
+  & button {
     display: inline-block;
     width: 48px;
     height: 48px;
@@ -46,7 +46,7 @@ export const SearchForm = styled.div`
       opacity: 1;
     }
 
-    &-label {
+    & label {
       position: absolute;
       width: 1px;
       height: 1px;

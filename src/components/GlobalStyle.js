@@ -1,7 +1,7 @@
 import { injectGlobal } from '@emotion/css';
 import 'modern-normalize';
 
-export const GlobalStyle = injectGlobal`
+injectGlobal`
   html {
   box-sizing: border-box;
   width: 100vw;
@@ -30,3 +30,5 @@ img {
   height: auto;
 }
 `;
+
+export default injectGlobal;

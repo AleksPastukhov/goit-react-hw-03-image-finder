@@ -1,8 +1,16 @@
-// import { ImageGalleryItem } from './ImageGalleryItem.styled';
-// import PropTypes from 'prop-types';
+import { ImageGalleryItem } from './ImageGalleryItem.styled';
+import PropTypes from 'prop-types';
 
-// {
-//   /* <li class="gallery-item">
-//   <img src="" alt="" />
-// </li>; */
-// }
+export function ImageItem({ id, webformatURL, tags }) {
+  return (
+    <ImageGalleryItem>
+      <img src={webformatURL} alt={tags} />
+    </ImageGalleryItem>
+  );
+}
+
+ImageItem.prototypes = {
+  id: PropTypes.number.isRequired,
+  tags: PropTypes.string.isRequired,
+  webformatURL: PropTypes.string.isRequired,
+};
