@@ -1,4 +1,4 @@
-// import {  } from './Modal.styled';
+// import { Overlay, Modal } from './Modal.styled';
 // import PropTypes from 'prop-types';
 
 // {
