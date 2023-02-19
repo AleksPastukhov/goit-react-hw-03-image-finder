@@ -6,20 +6,26 @@ import PixabayAPI from '../../services/pixabay-api';
 
 export class GallarySet extends Component {
   state = {
-    imagesData: [],
     page: 1,
+    imagesData: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
     const pixabayAPI = new PixabayAPI();
     const prevQuery = prevProps.searchQuery;
     const nextQuery = this.props.searchQuery;
-    const page = this.props.page;
-
     if (prevQuery !== nextQuery) {
+      this.setState(() => ({
+        page: 1,
+      }));
       pixabayAPI
-        .getImages(page, nextQuery)
-        .then(imageSet => this.setState({ imagesData: imageSet.hits }))
+        .getImages(1, nextQuery)
+        .then(imageSet =>
+          this.setState({
+            imagesData: imageSet.hits,
+            page: this.state.page + 1,
+          })
+        )
         .catch(error => console.log(error));
     }
   }
@@ -36,13 +42,40 @@ export class GallarySet extends Component {
     }
   };
 
+  onLoadMoreBtnClick = () => {
+    const query = this.props.searchQuery;
+    const pageNumber = this.state.page;
+    const pixabayAPI = new PixabayAPI();
+
+    pixabayAPI
+      .getImages(pageNumber, query)
+      .then(imageSet =>
+        this.setState({
+          imagesData: [...this.state.imagesData, ...imageSet.hits],
+          page: this.state.page + 1,
+        })
+      )
+      .catch(error => console.log(error));
+  };
+
   render() {
     return (
-      <ImageGallery onClick={this.onCurrentCardClick}>
-        {this.state.imagesData.map(({ id, webformatURL, tags }) => {
-          return <ImageItem key={id} webformatURL={webformatURL} tags={tags} />;
-        })}
-      </ImageGallery>
+      <>
+        <ImageGallery onClick={this.onCurrentCardClick}>
+          {this.state.imagesData.map(({ id, webformatURL, tags }) => {
+            return (
+              <ImageItem key={id} webformatURL={webformatURL} tags={tags} />
+            );
+          })}
+        </ImageGallery>
+        <button
+          type="button"
+          disabled={this.props.isBtnDisabled}
+          onClick={this.onLoadMoreBtnClick}
+        >
+          Load more
+        </button>
+      </>
     );
   }
 }
@@ -52,11 +85,3 @@ GallarySet.prototypes = {
   onOpenModal: PropTypes.func.isRequired,
   searchQuery: PropTypes.string.isRequired,
 };
-
-// images: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       webformatURL: PropTypes.string.isRequired,
-//       tags: PropTypes.string.isRequired,
-//     }).isRequired
-//   ).isRequired,

@@ -14,12 +14,18 @@ export class SearchQueryField extends Component {
       this.props.searchQuery !== this.state.userSearchQuery
     ) {
       this.props.onSabmit(this.state.userSearchQuery);
+      this.setState(() => ({
+        userSearchQuery: '',
+      }));
+      this.props.isBtnDisabled(false);
     }
   };
 
   onInputValue = e => {
     const { value } = e.currentTarget;
     this.setState({ userSearchQuery: value });
+
+    this.props.isBtnDisabled(true);
   };
 
   render() {

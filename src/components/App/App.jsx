@@ -9,9 +9,16 @@ import { ModalWindow } from '../Modal/Modal';
 export class App extends Component {
   state = {
     showModal: false,
+    buttonDisabled: true,
     imageURL: '',
     tags: '',
     searchQuery: '',
+  };
+
+  isBtnDisabled = bul => {
+    this.setState(() => ({
+      buttonDisabled: bul,
+    }));
   };
 
   onSabmit = query => {
@@ -45,11 +52,16 @@ export class App extends Component {
     const { showModal } = this.state;
 
     return (
-      <Layout onSabmit={this.onSabmit} searchQuery={this.state.searchQuery}>
+      <Layout
+        onSabmit={this.onSabmit}
+        searchQuery={this.state.searchQuery}
+        isBtnDisabled={this.isBtnDisabled}
+      >
         <GallarySet
           onCardClick={this.onCardClick}
           onOpenModal={this.toggleModal}
           searchQuery={this.state.searchQuery}
+          isBtnDisabled={this.state.buttonDisabled}
         />
         {showModal && (
           <ModalWindow onCloseModal={this.toggleModal}>
