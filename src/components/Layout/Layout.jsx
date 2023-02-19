@@ -1,4 +1,5 @@
 import { Container } from './Layout.styled';
+import PropTypes from 'prop-types';
 
 export const Layout = ({ children }) => {
   return (
@@ -8,4 +9,8 @@ export const Layout = ({ children }) => {
       <footer>footer</footer>
     </Container>
   );
+};
+
+Layout.prototype = {
+  children: PropTypes.node,
 };
