@@ -9,8 +9,10 @@ export class SearchQueryField extends Component {
 
   onFormSabmit = e => {
     e.preventDefault();
-    console.log('Submit form');
-    if (this.state.userSearchQuery.trim() !== '') {
+    if (
+      this.state.userSearchQuery.trim() !== '' &&
+      this.props.searchQuery !== this.state.userSearchQuery
+    ) {
       this.props.onSabmit(this.state.userSearchQuery);
     }
   };
