@@ -36,6 +36,7 @@ const imagesData = [
 export class App extends Component {
   state = {
     showModal: false,
+    imageURL: '',
   };
 
   toggleModal = () => {
@@ -44,18 +45,27 @@ export class App extends Component {
     }));
   };
 
+  onCardClick = url => {
+    if (url) {
+      this.setState(() => ({
+        imageURL: url,
+      }));
+    }
+  };
+
   render() {
     const { showModal } = this.state;
 
     return (
       <Layout>
-        <GallarySet images={imagesData} />
-        <button type="button" onClick={this.toggleModal}>
-          Відкрити модалку
-        </button>
+        <GallarySet
+          images={imagesData}
+          onCardClick={this.onCardClick}
+          onOpenModal={this.toggleModal}
+        />
         {showModal && (
           <ModalWindow onCloseModal={this.toggleModal}>
-            {<img src={imagesData[0].largeImageURL} alt={imagesData[0].tags} />}
+            {<img src={this.state.imageURL} alt={imagesData[0].tags} />}
           </ModalWindow>
         )}
         <GlobalStyle />
