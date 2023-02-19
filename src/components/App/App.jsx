@@ -37,6 +37,14 @@ export class App extends Component {
   state = {
     showModal: false,
     imageURL: '',
+    searchQuery: '',
+  };
+  onSabmit = query => {
+    if (query) {
+      this.setState(() => ({
+        searchQuery: query,
+      }));
+    }
   };
 
   toggleModal = () => {
@@ -57,7 +65,7 @@ export class App extends Component {
     const { showModal } = this.state;
 
     return (
-      <Layout>
+      <Layout onSabmit={this.onSabmit}>
         <GallarySet
           images={imagesData}
           onCardClick={this.onCardClick}

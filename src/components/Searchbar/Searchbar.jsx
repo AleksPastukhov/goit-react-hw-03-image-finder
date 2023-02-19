@@ -1,22 +1,43 @@
+import React, { Component } from 'react';
 import { SearchBar, SearchForm } from './Searchbar.styled';
-// import PropTypes from 'prop-types';
+import { BiSearchAlt } from 'react-icons/bi';
 
-export function SearchQueryField() {
-  return (
-    <SearchBar>
-      <SearchForm>
-        <button type="submit" class="button">
-          <span class="button-label">Search</span>
-        </button>
+export class SearchQueryField extends Component {
+  state = {
+    userSearchQuery: '',
+  };
 
-        <input
-          class="input"
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </SearchForm>
-    </SearchBar>
-  );
+  onFormSabmit = e => {
+    e.preventDefault();
+    console.log('Submit form');
+    if (this.state.userSearchQuery.trim() !== '') {
+      this.props.onSabmit(this.state.userSearchQuery);
+    }
+  };
+
+  onInputValue = e => {
+    const { value } = e.currentTarget;
+    this.setState({ userSearchQuery: value });
+  };
+
+  render() {
+    return (
+      <SearchBar>
+        <SearchForm onSubmit={this.onFormSabmit}>
+          <button>
+            <BiSearchAlt />
+          </button>
+
+          <input
+            onChange={this.onInputValue}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            value={this.state.userSearchQuery}
+          />
+        </SearchForm>
+      </SearchBar>
+    );
+  }
 }
