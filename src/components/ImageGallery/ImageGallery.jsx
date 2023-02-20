@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import { ImageGallery } from './ImageGallery.styled';
 import PropTypes from 'prop-types';
 import { ImageItem } from '../ImageGalleryItem/ImageGalleryItem';
-import PixabayAPI from '../../services/pixabay-api';
+import { fetchGalleryImages } from '../../services/pixabay-api';
 import { LoadMoreBtn } from '../Button/Button';
-import { RotatingLines } from 'react-loader-spinner';
+import { Loader } from '../Loader/Loader';
 
 const Status = {
   IDLE: 'idle',
@@ -23,7 +24,6 @@ export class GallarySet extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const pixabayAPI = new PixabayAPI();
     const prevQuery = prevProps.searchQuery;
     const nextQuery = this.props.searchQuery;
 
@@ -34,8 +34,7 @@ export class GallarySet extends Component {
         status: Status.PENDING,
       }));
 
-      pixabayAPI
-        .getImages(1, nextQuery)
+      fetchGalleryImages(1, nextQuery)
         .then(imageSet => {
           this.setState({
             imagesData: imageSet.hits,
@@ -43,6 +42,16 @@ export class GallarySet extends Component {
             status: Status.RESOLVED,
             totalHits: imageSet.totalHits,
           });
+          if (imageSet.totalHits !== 0) {
+            toast.success(
+              `Hooray!!! ${imageSet.totalHits} images were found for your request.`
+            );
+          }
+          if (imageSet.totalHits === 0) {
+            toast.error(
+              `UpsOops!!! We did not find any images for this request. Try changing the query.`
+            );
+          }
         })
         .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
@@ -63,20 +72,25 @@ export class GallarySet extends Component {
   onLoadMoreBtnClick = () => {
     const query = this.props.searchQuery;
     const pageNumber = this.state.page;
-    const pixabayAPI = new PixabayAPI();
 
     this.setState(() => ({
       status: Status.PENDING,
     }));
 
-    pixabayAPI
-      .getImages(pageNumber, query)
+    fetchGalleryImages(pageNumber, query)
       .then(imageSet => {
         this.setState({
           imagesData: [...this.state.imagesData, ...imageSet.hits],
           page: this.state.page + 1,
           status: Status.RESOLVED,
         });
+        if (
+          imageSet.totalHits === this.state.imagesData.length ||
+          imageSet.totalHits <
+            this.state.imagesData.length + imageSet.hits.length
+        ) {
+          toast.error(`Sorry we have nothing more to show you.`);
+        }
       })
       .catch(error => this.setState({ error, status: Status.REJECTED }));
   };
@@ -103,15 +117,7 @@ export class GallarySet extends Component {
               onLoadMoreBtnClick={this.onLoadMoreBtnClick}
             />
           )}
-        {status === 'pending' && (
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
-            visible={true}
-          />
-        )}
+        {status === 'pending' && <Loader />}
       </>
     );
   }

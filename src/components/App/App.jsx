@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import GlobalStyle from '../GlobalStyle';
 import { GallarySet } from '../ImageGallery/ImageGallery';
 import { ModalWindow } from '../Modal/Modal';
@@ -48,24 +50,37 @@ export class App extends Component {
   };
 
   render() {
-    const { showModal } = this.state;
+    const { showModal, searchQuery, buttonDisabled, imageURL, tags } =
+      this.state;
 
     return (
       <Wrapper>
+        <ToastContainer
+          position="top-right"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <SearchQueryField
           onSabmit={this.onSabmit}
-          searchQuery={this.state.searchQuery}
+          searchQuery={searchQuery}
           isBtnDisabled={this.isBtnDisabled}
         />
         <GallarySet
           onCardClick={this.onCardClick}
           onOpenModal={this.toggleModal}
-          searchQuery={this.state.searchQuery}
-          isBtnDisabled={this.state.buttonDisabled}
+          searchQuery={searchQuery}
+          isBtnDisabled={buttonDisabled}
         />
         {showModal && (
           <ModalWindow onCloseModal={this.toggleModal}>
-            {<img src={this.state.imageURL} alt={this.state.tags} />}
+            {<img src={imageURL} alt={tags} />}
           </ModalWindow>
         )}
 
