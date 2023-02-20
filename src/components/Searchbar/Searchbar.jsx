@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { SearchBar, SearchForm } from './Searchbar.styled';
 import { BiSearchAlt } from 'react-icons/bi';
 
@@ -49,3 +50,9 @@ export class SearchQueryField extends Component {
     );
   }
 }
+
+SearchQueryField.prototypes = {
+  onSabmit: PropTypes.func.isRequired,
+  isBtnDisabled: PropTypes.func.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+};

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import GlobalStyle from '../GlobalStyle';
-import { Layout } from '../Layout/Layout';
 import { GallarySet } from '../ImageGallery/ImageGallery';
 import { ModalWindow } from '../Modal/Modal';
-// import PropTypes from 'prop-types';
-// import { Wrapper } from './App.styled';
+import { SearchQueryField } from '../Searchbar/Searchbar';
+import { Wrapper } from './App.styled';
 
 export class App extends Component {
   state = {
@@ -52,11 +51,12 @@ export class App extends Component {
     const { showModal } = this.state;
 
     return (
-      <Layout
-        onSabmit={this.onSabmit}
-        searchQuery={this.state.searchQuery}
-        isBtnDisabled={this.isBtnDisabled}
-      >
+      <Wrapper>
+        <SearchQueryField
+          onSabmit={this.onSabmit}
+          searchQuery={this.state.searchQuery}
+          isBtnDisabled={this.isBtnDisabled}
+        />
         <GallarySet
           onCardClick={this.onCardClick}
           onOpenModal={this.toggleModal}
@@ -68,8 +68,9 @@ export class App extends Component {
             {<img src={this.state.imageURL} alt={this.state.tags} />}
           </ModalWindow>
         )}
+
         <GlobalStyle />
-      </Layout>
+      </Wrapper>
     );
   }
 }
